@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">AccessiblityDemo</string>
-    <string name="automation">自动运行脚本</string>
+    <string name="automation">自动运行功能</string>
 </resources>
