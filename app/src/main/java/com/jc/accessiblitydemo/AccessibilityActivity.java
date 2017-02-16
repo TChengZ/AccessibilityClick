@@ -38,6 +38,7 @@ public class AccessibilityActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         openAccessibilityServiceSettings();
+                        mOpenDialog.dismiss();
                     }
                 });
                 mOpenDialog = builder.show();
@@ -45,6 +46,9 @@ public class AccessibilityActivity extends Activity {
             if(!mOpenDialog.isShowing()) {
                 mOpenDialog.show();
             }
+        }
+        else{
+            AutomationService.getService().automation();
         }
     }
 
