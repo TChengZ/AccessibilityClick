@@ -5,6 +5,7 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -40,7 +41,9 @@ public class AutomationService extends AccessibilityService{
 
     public void automation(){
         backToHome();
-        findWx();
+        if(findWx()){
+            enterPYQ();
+        }
     }
 
     /**
@@ -56,21 +59,39 @@ public class AutomationService extends AccessibilityService{
     }
 
 
-    private void findWx(){
+    private void enterPYQ(){
         if(null == mService){
             return;
         }
+        AccessibilityNodeInfo accessibilityNodeInfo = findNodeByText("发现");
+        if(null != accessibilityNodeInfo){
+            accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            AccessibilityNodeInfo accessibilityNodeInfoPYQ = findNodeByText("朋友圈");
+            if(null != accessibilityNodeInfoPYQ){
+                accessibilityNodeInfoPYQ.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            }
+        }
+    }
+
+    private boolean findWx(){
+        if(null == mService){
+            return false;
+        }
         AccessibilityNodeInfo accessibilityNodeInfo = null;
+        int count = 0;
         do {
             accessibilityNodeInfo = findNodeByText("微信");
             mService.performGlobalAction(AccessibilityService.GESTURE_SWIPE_RIGHT_AND_DOWN);
             Log.d(TAG, "finding wx");
+            count++;
         }
-        while(null == accessibilityNodeInfo);
+        while(null == accessibilityNodeInfo && count < 20); //最多循环20次
         if(null != accessibilityNodeInfo) {
             Log.d(TAG, "find wx");
             accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            return true;
         }
+        return false;
     }
 
     //执行返回
